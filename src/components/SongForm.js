@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
+import axios from 'axios';
 
 function SongForm({ addSong }) {
-  const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
   const [singer, setSinger] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title && singer) {
-      addSong({ title, singer });
-      setTitle('');
-      setSinger('');
+    if (name && singer) {
+      const newSong = { name, singer };
+      // Enviar la canción al backend
+      axios.post('http://localhost:8080/api/songs', newSong)
+        .then(response => {
+          console.log("Cancion agregada: ", response.data)
+          addSong(response.data) //=> [...prevSongs, response.data]); // Agregar canción a la lista local
+          setName('');
+          setSinger('');
+        })
+        .catch(error => {
+          console.error('Error al agregar la canción:', error);
+        });
     }
   };
 
@@ -18,8 +28,8 @@ function SongForm({ addSong }) {
     <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <TextField
         label="Título de la canción"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         required
       />
       <TextField
@@ -28,7 +38,7 @@ function SongForm({ addSong }) {
         onChange={(e) => setSinger(e.target.value)}
         required
       />
-      <Button type="submit" variant="contained" sx={{ backgroundColor: '#30D9C8', color: '#043B38' }}> {/* Color tercero */}
+      <Button type="submit" variant="contained" sx={{ backgroundColor: '#30D9C8', color: '#043B38' }}>
         Agregar Canción
       </Button>
     </Box>
@@ -36,5 +46,6 @@ function SongForm({ addSong }) {
 }
 
 export default SongForm;
+
 
 

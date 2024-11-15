@@ -9,6 +9,8 @@ function AdminLogin({ setIsAdmin, isAdmin }) {
     if (password === 'admin123') {
       setIsAdmin(true);
       localStorage.setItem('isAdmin', 'true');
+    } else{
+        alert("Contraseña Incorrecta")
     }
   };
 

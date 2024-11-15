@@ -1,50 +1,76 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, List, ListItem, ListItemText, Typography, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from 'axios';
+//import SongForm from './SongForm'; // Importamos el formulario de canciones
 
-function SongList({ songs, deleteSong, isAdmin }) {
+function SongList({songs, setSongs, isAdmin}) {
+  //const [songs, setSongs] = useState([]);
+  //const [isAdmin, setIsAdmin] = useState(false);
+
+  // Verificar si el admin está logueado al cargar la página
+  useEffect(() => {
+    // Cargar canciones desde el backend (simulado)
+    axios.get('http://localhost:8080/api/songs')  // Suponiendo que el backend está corriendo en localhost
+      .then(response => {
+        setSongs(response.data); // Actualizamos la lista de canciones
+      })
+      .catch(error => {
+        console.error('Error al obtener las canciones:', error);
+      });
+  }, [setSongs]);
+
+  // Eliminar canción
+  const deleteSong = (id) => {
+    axios.delete(`http://localhost:8080/api/songs/${id}`)
+      .then(() => {
+        setSongs(songs.filter(song => song.id !== id)); // Eliminar canción de la lista
+      })
+      .catch(error => {
+        console.error('Error al eliminar la canción:', error);
+      });
+  };
+
   return (
     <Box sx={{ marginTop: '1rem' }}>
+      {/* Mostrar la lista de canciones */}
       <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#043B38' }}>
         Canciones en la lista:
       </Typography>
       <List>
-        {songs.map((song, index) => (
+        {songs.map((song) => (
           <ListItem
-            key={index}
+            key={song.id}
             sx={{
-              backgroundColor: '#eee', // Fondo para cada canción
-              margin: '0.5rem 0', // Espacio entre canciones
-              borderRadius: '8px', // Bordes redondeados
+              backgroundColor: '#eee',
+              margin: '0.5rem 0',
+              borderRadius: '8px',
               padding: '0.5rem',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Sombra para efecto
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             }}
           >
             <ListItemText
-              primary={`#${index + 1} - ${song.title} - ${song.singer}`} // Asegúrate de que `song` sea un string
-              sx={{
-                fontSize: '1.1rem', // Aumentar el tamaño de la fuente
-                color: '#043B38', // Color de texto
-              }}
+              primary={`${song.name} - ${song.singer}`}
+              sx={{ fontSize: '1.1rem', color: '#043B38' }}
             />
             {isAdmin && (
-              <IconButton onClick={() => deleteSong(index)} sx={{ color: '#000' }}>
+              <IconButton onClick={() => deleteSong(song.id)} sx={{ color: '#000' }}>
                 <DeleteIcon />
               </IconButton>
             )}
           </ListItem>
         ))}
       </List>
+
+
     </Box>
   );
 }
 
 export default SongList;
-
-
 
 
 

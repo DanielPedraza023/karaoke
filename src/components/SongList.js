@@ -8,10 +8,13 @@ function SongList({songs, setSongs, isAdmin}) {
   //const [songs, setSongs] = useState([]);
   //const [isAdmin, setIsAdmin] = useState(false);
 
+  const URL = 'karaoke-production-2ab4.up.railway.app'
+  const URL2 = "http://localhost:8080"
+
   // Verificar si el admin está logueado al cargar la página
   useEffect(() => {
     // Cargar canciones desde el backend (simulado)
-    axios.get('http://localhost:8080/api/songs')  // Suponiendo que el backend está corriendo en localhost
+    axios.get(`${URL2}/api/songs`)  
       .then(response => {
         setSongs(response.data); // Actualizamos la lista de canciones
       })
@@ -22,7 +25,7 @@ function SongList({songs, setSongs, isAdmin}) {
 
   // Eliminar canción
   const deleteSong = (id) => {
-    axios.delete(`http://localhost:8080/api/songs/${id}`)
+    axios.delete(`${URL2}/api/songs/${id}`)
       .then(() => {
         setSongs(songs.filter(song => song.id !== id)); // Eliminar canción de la lista
       })

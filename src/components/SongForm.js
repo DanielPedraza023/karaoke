@@ -6,12 +6,15 @@ function SongForm({ addSong }) {
   const [name, setName] = useState('');
   const [singer, setSinger] = useState('');
 
+  const URL = "invigorating-freedom-production.up.railway.app"
+  const URL2 = "http://localhost:8080"
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name && singer) {
       const newSong = { name, singer };
       // Enviar la canción al backend
-      axios.post('http://localhost:8080/api/songs', newSong)
+      axios.post(`${URL2}/api/songs`, newSong)
         .then(response => {
           console.log("Cancion agregada: ", response.data)
           addSong(response.data) //=> [...prevSongs, response.data]); // Agregar canción a la lista local

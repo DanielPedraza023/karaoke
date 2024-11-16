@@ -8,13 +8,15 @@ import axios from 'axios';
 
 function App() {
   const [songs, setSongs] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin') === 'true');
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin') === 'false');
 
+  const URL = 'invigorating-freedom-production.up.railway.app'
+  const URL2 = "http://localhost:8080"
   // Cargar canciones desde el backend al iniciar
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/songs');
+        const response = await axios.get(`${URL2}/api/songs`);
         setSongs(response.data);
       } catch (error) {
         console.error('Error al obtener las canciones:', error);
@@ -39,7 +41,7 @@ function App() {
   // Limpiar la lista de canciones
   const clearSongs = () => {
     if (isAdmin) {
-      axios.delete('http://localhost:8080/api/songs/all')
+      axios.delete(`${URL2}/api/songs/all`)
         .then(() => {
           setSongs([]); // Limpiar canciones localmente
           console.log("Lista limpia")

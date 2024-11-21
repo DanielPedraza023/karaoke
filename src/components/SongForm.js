@@ -14,7 +14,6 @@ function SongForm({ addSong }) {
       try{
         const addedSong = await apiService.addSong(newSong);
         addSong(addedSong);
-        alert("¡Canción agregada correctamente!")
         setName('');
         setSinger('');
       }

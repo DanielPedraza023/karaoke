@@ -42,6 +42,7 @@ function App() {
     try{
       const addedSong = await apiService.addSong(newSong)
       setSongs(prevSongs => [...prevSongs, addedSong])
+      alert("¡Canción agregada correctamente!")
     }
     catch(error){
       console.error(error)

@@ -37,8 +37,15 @@ function App() {
   }, []);
 
   // Agregar canción
-  const addSong = (newSong) => {
-    setSongs(prevSongs => [...prevSongs, newSong]); // Actualizar el estado
+  const addSong = async(newSong) => {
+    //setSongs(prevSongs => [...prevSongs, newSong]); // Actualizar el estado
+    try{
+      const addedSong = await apiService.addSong(newSong)
+      setSongs(prevSongs => [...prevSongs, addedSong])
+    }
+    catch(error){
+      console.error(error)
+    }
   };
 
   // Eliminar canción por ID
@@ -47,6 +54,7 @@ function App() {
       try{
         await apiService.deleteSong(id);
         setSongs(songs.filter(song => song.id !== id)); // Filtrar la canción por ID
+        alert("¡Canción eliminada correctamente!")
       }
       catch(error){
         console.error(error);
@@ -60,12 +68,13 @@ function App() {
       try{
         await apiService.clearSongs();
         setSongs([]);
+        alert("¡Lista de canciones reinciada!")
       }
       catch(error){
         console.error(error);
       }
+    }
   };
-  }
   // Manejar el inicio de sesión del admin
   const handleLogin = () => {
     localStorage.setItem('isAdmin', 'true');

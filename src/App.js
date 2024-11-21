@@ -24,7 +24,16 @@ function App() {
       }
     };
 
+    //Inicializar canciones y websockets
     fetchSongs();
+    apiService.connectWebSocket((updatedSongs) => {
+      setSongs(updatedSongs); // Actualizar canciones en tiempo real
+    });
+
+    // Limpiar conexión WebSocket al desmontar
+    return () => {
+      apiService.disconnectWebSocket();
+    };
   }, []);
 
   // Agregar canción

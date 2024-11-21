@@ -1,42 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, List, ListItem, ListItemText, Typography, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import axios from 'axios';
-//import SongForm from './SongForm'; // Importamos el formulario de canciones
 
-function SongList({songs, setSongs, isAdmin}) {
-  //const [songs, setSongs] = useState([]);
-  //const [isAdmin, setIsAdmin] = useState(false);
-
-  const URL = 'karaoke-production-2ab4.up.railway.app'
-  const URL2 = "http://localhost:8080"
-
-  // Verificar si el admin está logueado al cargar la página
-  useEffect(() => {
-    // Cargar canciones desde el backend (simulado)
-    axios.get(`${URL2}/api/songs`)  
-      .then(response => {
-        setSongs(response.data); // Actualizamos la lista de canciones
-      })
-      .catch(error => {
-        console.error('Error al obtener las canciones:', error);
-      });
-  }, [setSongs]);
-
-  // Eliminar canción
-  const deleteSong = (id) => {
-    axios.delete(`${URL2}/api/songs/${id}`)
-      .then(() => {
-        setSongs(songs.filter(song => song.id !== id)); // Eliminar canción de la lista
-      })
-      .catch(error => {
-        console.error('Error al eliminar la canción:', error);
-      });
-  };
-
+function SongList({ songs, deleteSong, isAdmin }) {
   return (
     <Box sx={{ marginTop: '1rem' }}>
-      {/* Mostrar la lista de canciones */}
       <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#043B38' }}>
         Canciones en la lista:
       </Typography>
@@ -67,8 +35,6 @@ function SongList({songs, setSongs, isAdmin}) {
           </ListItem>
         ))}
       </List>
-
-
     </Box>
   );
 }

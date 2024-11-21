@@ -4,22 +4,23 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import SongForm from './components/SongForm';
 import SongList from './components/SongList';
-import axios from 'axios';
+import apiService from './services/apiService';
+
+
 
 function App() {
   const [songs, setSongs] = useState([]);
   const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin') === 'false');
 
-  const URL = 'invigorating-freedom-production.up.railway.app'
-  const URL2 = "http://localhost:8080"
+
   // Cargar canciones desde el backend al iniciar
   useEffect(() => {
     const fetchSongs = async () => {
       try {
-        const response = await axios.get(`${URL2}/api/songs`);
-        setSongs(response.data);
+        const songs = await apiService.getSongs();
+        setSongs(songs);
       } catch (error) {
-        console.error('Error al obtener las canciones:', error);
+        console.error(error);
       }
     };
 
@@ -32,26 +33,30 @@ function App() {
   };
 
   // Eliminar canción por ID
-  const deleteSong = (id) => {
+  const deleteSong = async (id) => {
     if (isAdmin) {
-      setSongs(songs.filter(song => song.id !== id)); // Filtrar la canción por ID
+      try{
+        await apiService.deleteSong(id);
+        setSongs(songs.filter(song => song.id !== id)); // Filtrar la canción por ID
+      }
+      catch(error){
+        console.error(error);
+      }
     }
   };
 
   // Limpiar la lista de canciones
-  const clearSongs = () => {
+  const clearSongs = async() => {
     if (isAdmin) {
-      axios.delete(`${URL2}/api/songs/all`)
-        .then(() => {
-          setSongs([]); // Limpiar canciones localmente
-          console.log("Lista limpia")
-        })
-        .catch(error => {
-          console.error('Error al limpiar las canciones:', error);
-        });
-    }
+      try{
+        await apiService.clearSongs();
+        setSongs([]);
+      }
+      catch(error){
+        console.error(error);
+      }
   };
-
+  }
   // Manejar el inicio de sesión del admin
   const handleLogin = () => {
     localStorage.setItem('isAdmin', 'true');

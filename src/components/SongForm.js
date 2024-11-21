@@ -1,29 +1,25 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
-import axios from 'axios';
+import apiService from '../services/apiService';
 
 function SongForm({ addSong }) {
   const [name, setName] = useState('');
   const [singer, setSinger] = useState('');
 
-  const URL = "invigorating-freedom-production.up.railway.app"
-  const URL2 = "http://localhost:8080"
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (name && singer) {
       const newSong = { name, singer };
       // Enviar la canción al backend
-      axios.post(`${URL2}/api/songs`, newSong)
-        .then(response => {
-          console.log("Cancion agregada: ", response.data)
-          addSong(response.data) //=> [...prevSongs, response.data]); // Agregar canción a la lista local
-          setName('');
-          setSinger('');
-        })
-        .catch(error => {
-          console.error('Error al agregar la canción:', error);
-        });
+      try{
+        const addedSong = await apiService.addSong(newSong);
+        addSong(addedSong);
+        setName('');
+        setSinger('');
+      }
+      catch(error){
+        console.error(error);
+      }
     }
   };
 

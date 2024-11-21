@@ -51,8 +51,8 @@ const apiService = {
       return;
     }
 
-    socket = new WebSocket(`ws://${URL.replace('http://', '')}/song-updates`);
-
+    //socket = new WebSocket(`ws://${URL.replace('http://', '')}/song-updates`);
+      socket = new WebSocket(`ws://localhost:8080/song-updates`)
     socket.onopen = () => {
       console.log("Conexión WebSocket establecida.");
     };

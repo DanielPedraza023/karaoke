@@ -57,7 +57,7 @@ const apiService = {
     }
 
     //socket = new WebSocket(`ws://localhost:8080/song-updates`)
-    socket = new WebSocket("wss://e420-181-142-193-145.ngrok-free.app/song-updates");
+    socket = new WebSocket("ws://e420-181-142-193-145.ngrok-free.app/song-updates");
 
     socket.onopen = () => {
       console.log("Conexión WebSocket establecida.");

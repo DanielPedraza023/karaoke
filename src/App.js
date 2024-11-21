@@ -10,7 +10,7 @@ import apiService from './services/apiService';
 
 function App() {
   const [songs, setSongs] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin') === 'true');
+  const [isAdmin, setIsAdmin] = useState(localStorage.getItem('isAdmin') === 'false');
 
 
   // Cargar canciones desde el backend al iniciar
